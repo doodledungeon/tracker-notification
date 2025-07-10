@@ -9,7 +9,7 @@ jobs:
   trigger:
     runs-on: ubuntu-latest
     steps:
-      - name: Call Firebase Function
+      - name: Call Netlify Function
         run: |
-          curl -X POST "https://us-central1-tracker117-ee50d.cloudfunctions.net/sendDailyNotifications" \
+          curl -X POST "https://tracker117.netlify.app/.netlify/functions/sendDailyNotifications" \
             -H "Authorization: Bearer changeme123"
