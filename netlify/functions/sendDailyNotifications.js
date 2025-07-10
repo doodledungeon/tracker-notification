@@ -1,3 +1,4 @@
+// Trigger redeploy
 const admin = require('firebase-admin');
 
 // Initialize Firebase Admin SDK only once
