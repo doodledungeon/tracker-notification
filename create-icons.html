@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate App Icons</title>
+</head>
+<body>
+    <h1>App Icon Generator</h1>
+    <p>This will create placeholder app icons for your tracker app.</p>
+    <button onclick="generateIcons()">Generate Icons</button>
+    <div id="output"></div>
+
+    <script>
+        function generateIcons() {
+            const sizes = [192, 512];
+            const output = document.getElementById('output');
+            output.innerHTML = '';
+
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+
+                // Dark background
+                ctx.fillStyle = '#181818';
+                ctx.fillRect(0, 0, size, size);
+
+                // Progress bar background
+                const barWidth = size * 0.8;
+                const barHeight = size * 0.1;
+                const barX = (size - barWidth) / 2;
+                const barY = size * 0.6;
+                
+                ctx.fillStyle = '#232323';
+                ctx.fillRect(barX, barY, barWidth, barHeight);
+
+                // Progress bar fill
+                ctx.fillStyle = '#4f8cff';
+                ctx.fillRect(barX, barY, barWidth * 0.7, barHeight);
+
+                // Text
+                ctx.fillStyle = '#ffffff';
+                ctx.font = `bold ${size * 0.15}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillText('TRACKER', size / 2, size * 0.4);
+
+                // Download link
+                const link = document.createElement('a');
+                link.download = `icon-${size}x${size}.png`;
+                link.href = canvas.toDataURL();
+                link.textContent = `Download ${size}x${size} icon`;
+                link.style.display = 'block';
+                link.style.margin = '10px';
+                output.appendChild(link);
+            });
+        }
+    </script>
+</body>
+</html> 
