@@ -24,6 +24,7 @@ exports.handler = async function(event, context) {
 
   const db = admin.firestore();
   const tokensSnapshot = await db.collection('fcmTokens').get();
+  console.log('Number of tokens found:', tokensSnapshot.size);
 
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -33,6 +34,7 @@ exports.handler = async function(event, context) {
   for (const doc of tokensSnapshot.docs) {
     const userId = doc.id;
     const token = doc.data().token;
+    console.log('Processing user:', userId, 'with token:', token);
 
     // Get yesterday's completed tasks for this user
     const tasksSnapshot = await db.collection('tasks')
@@ -42,6 +44,7 @@ exports.handler = async function(event, context) {
       .get();
 
     const completedTasks = tasksSnapshot.docs.map(t => t.data().text);
+    console.log('Completed tasks for', userId, ':', completedTasks);
 
     // Compose message
     let message;
@@ -50,10 +53,11 @@ exports.handler = async function(event, context) {
     } else {
       message = `Yesterday you didn't check off any tasks, but today is a new day! Let's get it!`;
     }
+    console.log('Message to send:', message);
 
     // Send push notification
     try {
-      await admin.messaging().send({
+      const sendResult = await admin.messaging().send({
         token,
         notification: {
           title: 'Good Morning! 🌞',
@@ -63,12 +67,14 @@ exports.handler = async function(event, context) {
           url: '/',
         }
       });
+      console.log('Notification sent to', userId, 'result:', sendResult);
       sentCount++;
     } catch (err) {
       console.error(`Error sending to ${userId}:`, err);
     }
   }
 
+  console.log('Total notifications sent:', sentCount);
   return {
     statusCode: 200,
     body: `Notifications sent to ${sentCount} users.`,
