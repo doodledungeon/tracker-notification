@@ -1,0 +1,15 @@
+name: Daily Notification Trigger
+
+on:
+  schedule:
+    - cron: '0 18 * * *'  # Runs at 11am Pacific Time (adjusts for daylight saving)
+  workflow_dispatch:      # Allows you to run it manually from GitHub
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Firebase Function
+        run: |
+          curl -X POST "https://us-central1-tracker117-ee50d.cloudfunctions.net/sendDailyNotifications" \
+            -H "Authorization: Bearer changeme123"
