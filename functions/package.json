@@ -1,8 +1,0 @@
-{
-  "name": "functions",
-  "version": "1.0.0",
-  "main": "send_daily_notifications.js",
-  "dependencies": {
-    "firebase-admin": "^11.10.1"
-  }
-}
